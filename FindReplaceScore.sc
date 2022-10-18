@@ -48,7 +48,7 @@ FindReplaceScore {
 			height
 		), false, false).background_(Color.white);
 
-		starView = StarView(
+		starView = FindReplaceStarView(
 			window,
 			Rect(125, 145, window.bounds.width - 250, window.bounds.height - 250),
 			numPlayers

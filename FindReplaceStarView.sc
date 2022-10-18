@@ -1,4 +1,4 @@
-StarView {
+FindReplaceStarView {
 	var <parent, <bounds, <numPlayers;
 	var <view, drawStar;
 	var <outerPoints, <innerPoints, <outerRadius, <innerRadius;
