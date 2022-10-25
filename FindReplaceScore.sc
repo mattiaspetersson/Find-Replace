@@ -49,7 +49,7 @@ FindReplaceScore {
 					functionView.redrawWithNewFunctions(functionView.functions);
 					n = starView.spin;
 					fade = {
-						var num = rrand(150, 300);
+						var num = rrand(1500, 3000);
 						num.do{|i|
 							faderView.background_(Color(alpha: i / num));
 							(1/60).wait;
