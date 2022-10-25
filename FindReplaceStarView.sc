@@ -3,13 +3,14 @@ FindReplaceStarView {
 	var <view, drawStar;
 	var <outerPoints, <innerPoints, <outerRadius, <innerRadius;
 	var <angle, halfAngle, polar;
-	var snurr;
+	var <>snurr, spinArray;
 
 	*new {|parent, bounds, numPlayers = 8|
 		^super.newCopyArgs(parent, bounds, numPlayers).initStar;
 	}
 
 	initStar {
+		spinArray = Array.series(numPlayers);
 		view = UserView(parent, bounds).background_(Color.clear);
 		outerRadius = view.bounds.width / 2;
 		innerRadius = view.bounds.width / 6;
@@ -67,7 +68,8 @@ FindReplaceStarView {
 	}
 
 	spin { // spins the star and returns the index for where it stopped
-		var stopAt = numPlayers.rand;
+		var stopAt = this.urn; //numPlayers.rand;
+
 		var numLaps = 1 + (numPlayers.reciprocal * stopAt);
 		var env = Env([1/360, 1/60], numLaps * 360, -4);
 
@@ -85,5 +87,12 @@ FindReplaceStarView {
 			}.fork(AppClock);
 		});
 		^stopAt;
+	}
+
+	urn {
+		var n;
+		n = spinArray.choose ? numPlayers.rand;
+		spinArray.remove(n);
+		^n;
 	}
 }

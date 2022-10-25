@@ -76,18 +76,27 @@ FindReplaceScore {
 					functionView.redrawWithNewFunctions(functionView.functions);
 					n = starView.spin;
 					fade = {
-						var num = rrand(1500, 3000);
+						var num = rrand(150, 300);
 						num.do{|i|
 							faderView.background_(Color(alpha: i / num));
 							(1/60).wait;
 						};
-						// instead: only numbers on the wheel. Show F or R in the middle (w. increasing probability for each spin)
+						// instead: only numbers on the wheel. Show F or R in the middle (with increasing probability for each spin)
 						functionView.functions[n] = "R";
 						window.refresh;
 						fade = nil;
 					}.fork(AppClock);
 				});
 			};
+
+			case {unicode == 27} {this.reset};
 		};
+	}
+
+	reset {
+		if(fade.notNil) {fade.stop; fade = nil};
+		if(starView.notNil) {starView.snurr.stop; starView.snurr = nil};
+		window.close;
+		this.init;
 	}
 }
