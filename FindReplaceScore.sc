@@ -1,10 +1,11 @@
 // Find & Replace for live electronics ensemble.
-// Mattias Petersson, (2019) 2022.
+// Mattias Petersson, (2019 - 2022).
 
 FindReplaceScore {
 	var numPlayers;
 	var window, starView, functionView, faderView, infoTextView, fade;
 	var width, height;
+	var counter;
 
 	*new {|numPlayers = 9|
 		^super.newCopyArgs(numPlayers).init;
@@ -13,10 +14,11 @@ FindReplaceScore {
 	init {
 		width = Window.screenBounds.width;
 		height = Window.screenBounds.height;
+		counter = 0;
 
 		window = Window.new("Find & Replace", Rect(
 			(width / 2) - (height / 2),
-			(height / 2),
+			0, //(height / 2),
 			height,
 			height
 		), false, false).background_(Color.white);
@@ -43,11 +45,14 @@ FindReplaceScore {
 		window.view.keyUpAction = {|view, char, mod, unicode, keycode, key|
 			case {unicode == 32} {
 				if(fade.isNil, {
-					var n;
+					var n, prevFunc;
 					infoTextView.string_("");
 					faderView.background_(Color(alpha: 0.0));
 					functionView.redrawWithNewFunctions(functionView.functions);
 					n = starView.spin;
+					prevFunc = functionView.functions[n];
+					counter = (counter + 1) % (numPlayers * 2);
+
 					fade = {
 						var num = rrand(1500, 3000);
 						num.do{|i|
@@ -55,7 +60,8 @@ FindReplaceScore {
 							(1/60).wait;
 						};
 						// instead: only numbers on the wheel. Show F or R in the middle (with increasing probability for each spin)
-						functionView.functions[n] = "R";
+						functionView.functions[n] = if(((counter) / (numPlayers * 2)).coin)
+						{"R"} {prevFunc};
 						window.refresh;
 						fade = nil;
 					}.fork(AppClock);

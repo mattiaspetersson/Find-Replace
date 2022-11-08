@@ -68,7 +68,8 @@ FindReplaceStarView {
 	}
 
 	spin { // spins the star and returns the index for where it stopped
-		var stopAt = this.urn; //numPlayers.rand;
+		var stopAt = numPlayers.rand;
+		//var stopAt = this.urn;
 
 		var numLaps = 1 + (numPlayers.reciprocal * stopAt);
 		var env = Env([1/360, 1/60], numLaps * 360, -4);
