@@ -17,16 +17,15 @@ sent back to the circle of speakers in a one-to-one fashion.
 starting in the speaker immediately to the left of the player.
 
 ### Playing
-Run this line (adjust for the number of players):
+Run this line (adjust for the number of beams in the star):
 
 ```f = FindReplaceScore(10);```
 
-- Start the piece in sync by playing a short, sound togehter and press space to spin the 
-star to randomize a number (or F).
-- Play in sync with the delay and use the number to create a pattern where you
-play on the first and the last count.
-- F means "Find", and indicates that you should find and articulate a resulting
-pattern that you hear in that moment.
-- The wheel will gradually be filled by R:s. This means that you should replace
-the percussive, rhythmic patterns with continuous sounds with softer envelopes.
-- The piece ends when all rhythm has been replaced by a drone.
+- Start the piece in sync by simultaneously playing a short, sound together and pressing space. 
+- The star spins and randomizes a number or a function.
+- Play in sync with the delay and use the numbers to count the beats and create a pattern where you play on the first and the last count.
+- The gradual fade to black indicates a diminuendo.
+- F means "Find", and means that you should find and play a rhythmic pattern in the currently shared texture.
+- The found pattern should be repeated and be as many beats long as the star indicates. If it points to a blank circle – improvise!
+- R means "Replace". This entails replacing the percussive, rhythmic patterns with continuous sounds with softer envelopes. Repeat the sound after the number of beats indicated by the star. Blank circle indicates that the sound should be continuous for the whole period.
+- After 18 spins the piece ends with an R and a slow fade.
