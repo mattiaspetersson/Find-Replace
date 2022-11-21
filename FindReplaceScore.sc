@@ -96,7 +96,7 @@ FindReplaceScore {
 
 			\spinDone, {
 				var prob;
-				counter = (counter + 1).postln;
+				counter = (counter + 1);
 				prob = (counter / numBeams).clip(0.18, 0.72);
 				prob.postln;
 
@@ -106,7 +106,7 @@ FindReplaceScore {
 						var frProb;
 						frCounter = (frCounter + 1).clip(0, numBeams);
 						frProb = frCounter / (numBeams);
-						currentCenterViewString = ["F", "R"].wchoose([1 - frProb, frProb * (counter * 0.5)].normalizeSum.postln);
+						currentCenterViewString = ["F", "R"].wchoose([1 - frProb, frProb * (counter * 0.5)].normalizeSum);
 						centerView.string = currentCenterViewString;
 						if(currentCenterViewString == "R") {functionView.functions[currentSpinPos] = ""};
 					}
