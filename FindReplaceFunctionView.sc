@@ -1,28 +1,24 @@
 FindReplaceFunctionView {
-	var <parent, <bounds, <numPlayers;
+	var <parent, <bounds, <numBeams;
 	var <view, drawFunctionView;
 	var <points, <radius, <angle;
 	var <>functions;
 
-	*new {|parent, bounds, numPlayers = 8|
-		^super.newCopyArgs(parent, bounds, numPlayers).initFunctionView;
+	*new {|parent, bounds, numBeams = 8|
+		^super.newCopyArgs(parent, bounds, numBeams).initFunctionView;
 	}
 
 	initFunctionView {
 		view = UserView(parent, bounds).background_(Color.clear);
 		radius = (view.bounds.width / 2) - 30;
-		angle = 2pi / numPlayers;
-		//functions = ["7", "11", "13", "F"];
-		functions = numPlayers.collect{|i|
-			["7", "11", "13", "F"][i%4];
-		};
+		angle = 2pi / numBeams;
+		functions = ["5", "7", "9", "11", "13", "15", "17", "19", "21"].wrapExtend(numBeams).scramble;
 
 		drawFunctionView = {
 			var x = 0, y = 0;
-
 			points = [];
 
-			numPlayers.do{|i|
+			numBeams.do{|i|
 				var a, sx, sy;
 				a = i * angle;
 				sx = x + cos(a) * radius;
@@ -64,7 +60,7 @@ FindReplaceFunctionView {
 		};
 		textView = StaticText(fv, fv.bounds)
 		.string_(string)
-		.font_(Font("Monaco", 36, false))
+		.font_(Font("Monaco", 32, false))
 		.stringColor_(Color.red)
 		.align_(\center);
 

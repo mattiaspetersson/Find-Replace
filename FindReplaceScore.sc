@@ -2,23 +2,24 @@
 // Mattias Petersson, (2019 - 2022).
 
 FindReplaceScore {
-	var numPlayers;
-	var window, starView, functionView, faderView, infoTextView, fade;
+	var numBeams;
+	var window, starView, functionView, faderView, <centerView, infoTextView, fade;
 	var width, height;
-	var counter;
+	var counter, frCounter, currentCenterViewString, currentSpinPos;
 
-	*new {|numPlayers = 9|
-		^super.newCopyArgs(numPlayers).init;
+	*new {|numBeams = 9|
+		^super.newCopyArgs(numBeams).init;
 	}
 
 	init {
 		width = Window.screenBounds.width;
 		height = Window.screenBounds.height;
 		counter = 0;
+		frCounter = -1;
 
 		window = Window.new("Find & Replace", Rect(
 			(width / 2) - (height / 2),
-			0, //(height / 2),
+			0,
 			height,
 			height
 		), false, false).background_(Color.white);
@@ -26,16 +27,28 @@ FindReplaceScore {
 		starView = FindReplaceStarView(
 			window,
 			Rect(125, 145, window.bounds.width - 250, window.bounds.height - 250),
-			numPlayers
+			numBeams
 		);
+
+		starView.addDependant(this);
+
+		centerView = StaticText(starView.view, Rect((starView.bounds.width / 2) - 200, (starView.bounds.height / 2) - 100, 400, 200))
+		.string_("")
+		.stringColor_(Color.red)
+		.align_(\center)
+		.font_(Font("Monaco", 108));
+
 		functionView = FindReplaceFunctionView(
 			window,
 			Rect(66, 86, window.bounds.width - 130, window.bounds.height - 130),
-			numPlayers
+			numBeams
 		);
-		faderView = View(window, Rect(0, 0, width, height)).background_(Color(alpha: 1.0));
-		infoTextView = StaticText(faderView, Rect(0, 0, width, height))
+
+		faderView = View(window, Rect(0, 0, height, height)).background_(Color(alpha: 1.0));
+
+		infoTextView = StaticText(faderView, Rect((faderView.bounds.width / 2) - 150, (faderView.bounds.height / 2) - 50, 300, 100))
 		.string_("Press space to start")
+		.stringColor_(Color.red)
 		.align_(\center)
 		.font_(Font("Monaco", 36));
 
@@ -45,23 +58,17 @@ FindReplaceScore {
 		window.view.keyUpAction = {|view, char, mod, unicode, keycode, key|
 			case {unicode == 32} {
 				if(fade.isNil, {
-					var n, prevFunc;
+					var n;
 					infoTextView.string_("");
 					faderView.background_(Color(alpha: 0.0));
 					functionView.redrawWithNewFunctions(functionView.functions);
-					n = starView.spin;
-					prevFunc = functionView.functions[n];
-					counter = (counter + 1) % (numPlayers * 2);
-
+					currentSpinPos = starView.spin;
 					fade = {
-						var num = rrand(1500, 3000);
+						var num = rrand(900, 2700); // 1500, 3000
 						num.do{|i|
 							faderView.background_(Color(alpha: i / num));
 							(1/60).wait;
 						};
-						// instead: only numbers on the wheel. Show F or R in the middle (with increasing probability for each spin)
-						functionView.functions[n] = if(((counter) / (numPlayers * 2)).coin)
-						{"R"} {prevFunc};
 						window.refresh;
 						fade = nil;
 					}.fork(AppClock);
@@ -77,5 +84,48 @@ FindReplaceScore {
 		if(starView.notNil) {starView.snurr.stop; starView.snurr = nil};
 		window.close;
 		this.init;
+	}
+
+	update {|theChanger, par, val|
+		switch(par,
+			\spin, {
+				currentSpinPos = (val.round) % functionView.functions.size;
+				currentCenterViewString = functionView.functions[currentSpinPos];
+				centerView.string = currentCenterViewString;
+			},
+
+			\spinDone, {
+				var prob;
+				counter = (counter + 1).postln;
+				prob = (counter / numBeams).clip(0.18, 0.72);
+				prob.postln;
+
+				if(counter < 18) {
+					if(prob.coin)
+					{ // if true, choose F(ind) or R(eplace)
+						var frProb;
+						frCounter = (frCounter + 1).clip(0, numBeams);
+						frProb = frCounter / (numBeams);
+						currentCenterViewString = ["F", "R"].wchoose([1 - frProb, frProb * (counter * 0.5)].normalizeSum.postln);
+						centerView.string = currentCenterViewString;
+						if(currentCenterViewString == "R") {functionView.functions[currentSpinPos] = ""};
+					}
+					{centerView.string = currentCenterViewString};
+				} {
+					if(fade.notNil) {fade.stop};
+					centerView.string = "R";
+					fade = {
+						var num = 2700;
+						num.do{|i|
+							faderView.background_(Color(alpha: i / num));
+							(1/60).wait;
+						};
+						infoTextView.string_("You have reach the end. Press escape to reset.");
+						window.refresh;
+						fade = nil;
+					}.fork(AppClock);
+				};
+			}
+		)
 	}
 }

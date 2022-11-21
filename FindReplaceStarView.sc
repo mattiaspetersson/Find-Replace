@@ -1,20 +1,20 @@
 FindReplaceStarView {
-	var <parent, <bounds, <numPlayers;
+	var <parent, <bounds, <numBeams;
 	var <view, drawStar;
 	var <outerPoints, <innerPoints, <outerRadius, <innerRadius;
 	var <angle, halfAngle, polar;
 	var <>snurr, spinArray;
 
-	*new {|parent, bounds, numPlayers = 8|
-		^super.newCopyArgs(parent, bounds, numPlayers).initStar;
+	*new {|parent, bounds, numBeams = 8|
+		^super.newCopyArgs(parent, bounds, numBeams).initStar;
 	}
 
 	initStar {
-		spinArray = Array.series(numPlayers);
+		spinArray = Array.series(numBeams);
 		view = UserView(parent, bounds).background_(Color.clear);
 		outerRadius = view.bounds.width / 2;
 		innerRadius = view.bounds.width / 6;
-		angle = 2pi / numPlayers;
+		angle = 2pi / numBeams;
 		halfAngle = angle / 2;
 
 		drawStar = {
@@ -23,7 +23,7 @@ FindReplaceStarView {
 			outerPoints = [];
 			innerPoints = [];
 
-			numPlayers.do{|i|
+			numBeams.do{|i|
 				var a, sx, sy;
 				a = i * angle;
 				sx = x + cos(a) * outerRadius;
@@ -38,9 +38,9 @@ FindReplaceStarView {
 			Pen.fillColor_(Color.black);
 			Pen.moveTo(outerPoints[0]);
 
-			numPlayers.do{|i|
+			numBeams.do{|i|
 				Pen.lineTo(innerPoints[i]);
-				Pen.lineTo(outerPoints[(i+1)%numPlayers]);
+				Pen.lineTo(outerPoints[(i+1)%numBeams]);
 			};
 
 			Pen.translate(view.bounds.width / 2, view.bounds.height / 2); // move to the center
@@ -51,7 +51,7 @@ FindReplaceStarView {
 			Pen.moveTo(innerPoints.reverse[0]);
 			Pen.width_(3);
 
-			numPlayers.do{|i|
+			numBeams.do{|i|
 				if(i==0) {
 					Pen.strokeColor_(Color.red);
 					Pen.lineTo(outerPoints[i]);
@@ -68,10 +68,10 @@ FindReplaceStarView {
 	}
 
 	spin { // spins the star and returns the index for where it stopped
-		var stopAt = numPlayers.rand;
-		//var stopAt = this.urn;
+		//var stopAt = numBeams.rand;
+		var stopAt = this.urn;
 
-		var numLaps = 1 + (numPlayers.reciprocal * stopAt);
+		var numLaps = 1 + (numBeams.reciprocal * stopAt);
 		var env = Env([1/360, 1/60], numLaps * 360, -4);
 
 		if(snurr.isNil, {
@@ -83,8 +83,10 @@ FindReplaceStarView {
 						drawStar.()
 					};
 					(env[i] * 0.05).wait;
+					this.changed(\spin, (i/360)*numBeams);
 				};
 				snurr = nil;
+				this.changed(\spinDone);
 			}.fork(AppClock);
 		});
 		^stopAt;
@@ -92,7 +94,7 @@ FindReplaceStarView {
 
 	urn {
 		var n;
-		n = spinArray.choose ? numPlayers.rand;
+		n = spinArray.choose ?? {spinArray = Array.series(numBeams); n = spinArray.choose}; //? numBeams.rand;
 		spinArray.remove(n);
 		^n;
 	}
