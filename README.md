@@ -25,7 +25,6 @@ Run this line (adjust for the number of beams in the star):
 - The star spins and randomizes a number or a function.
 - Play in sync with the delay and use the numbers to count the beats and create a pattern where you play on the first and the last count.
 - The gradual fade to black indicates a diminuendo.
-- F means "Find", and means that you should find and play a rhythmic pattern in the currently shared texture.
-- The found pattern should be repeated and be as many beats long as the star indicates. If it points to a blank circle – improvise!
+- F means "Find", and means that you should find and play a rhythmic pattern in the currently shared texture. The found pattern should be repeated and be as many beats long as the star indicates. If it points to a blank circle – improvise!
 - R means "Replace". This entails replacing the percussive, rhythmic patterns with continuous sounds with softer envelopes. Repeat the sound after the number of beats indicated by the star. Blank circle indicates that the sound should be continuous for the whole period.
 - After 18 spins the piece ends with an R and a slow fade.
