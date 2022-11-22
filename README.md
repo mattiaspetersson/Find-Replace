@@ -17,9 +17,9 @@ sent back to the circle of speakers in a one-to-one fashion.
 starting in the speaker immediately to the left of the player.
 
 ### Playing
-Run this line (adjust for the number of beams in the star):
+Run this line (the first argument allows for changing the number of beams in the star):
 
-```f = FindReplaceScore(10);```
+```f = FindReplaceScore();```
 
 - Start the piece in sync by simultaneously playing a short, sound together and pressing space. 
 - The star spins and randomizes a number or a function.
