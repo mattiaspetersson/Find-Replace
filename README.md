@@ -1,9 +1,10 @@
 # Find & Replace for live electronics ensemble
  Mattias Petersson, (2019) 2022.
  
- This piece was composed for the Royal Live Electronics ensemble at The Royal College of Music in Stockholm. 
- It is an excercise in rhythm where a shared groove is established by individual patterns, played by the ensemble members,
- fed through a multichannel multi-tap delay.
+ This piece was composed for the Royal Live Electronics ensemble at The Royal College of Music in Stockholm. The first version, composed in 2019 used a film that, along with a fixed media soundfile, provided a dynamic score to be interpreted by the performers. The current version of this score is entirely made in SuperCollider, with a graphical score intended to run locally on the performer's laptops.
+ 
+ Find & Replace is an excercise in rhythm where a shared groove is established by pattern algorithms, individually interpreted by the ensemble members,
+ fed through a multichannel multi-tap delay, and graudally transforms into a shared drone.
 
 ## Instructions
 
